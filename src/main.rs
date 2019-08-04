@@ -1,9 +1,24 @@
 fn main() {
-    let a = read::<usize>();
-    let bc = read_vec::<usize>();
-    let s = read::<String>();
-    let sum = a + bc[0] + bc[1];
-    println!("{} {}", sum, s);
+    let ab = read_vec::<usize>();
+    println!("{}", check_all_even(ab))
+}
+
+fn check_all_even(xs: Vec<usize>) -> String {
+    for &x in xs.iter() {
+        if is_even(x) {
+            return "Even".to_string()
+        }
+    }
+    "Odd".to_string()
+}
+
+fn is_even(x: usize) -> bool {
+    x % 2 == 0
+}
+
+fn read_vec<T: std::str::FromStr>() -> Vec<T> {
+    read::<String>().split_whitespace()
+        .map(|e| e.parse().ok().unwrap()).collect()
 }
 
 fn read<T: std::str::FromStr>() -> T {
@@ -12,10 +27,11 @@ fn read<T: std::str::FromStr>() -> T {
     s.trim().parse().ok().unwrap()
 }
 
-fn read_vec<T: std::str::FromStr>() -> Vec<T> {
-    read::<String>().split_whitespace()
-        .map(|e| e.parse().ok().unwrap()).collect()
+
+fn is_odd(x: usize) -> bool {
+    x % 2 != 0
 }
+
 
 fn read_vec2<T: std::str::FromStr>(n: u32) -> Vec<Vec<T>> {
     (0..n).map(|_| read_vec()).collect()
@@ -41,6 +57,7 @@ fn harmony(a: isize, b: isize) -> String {
 #[cfg(test)]
 mod tests {
     use ::{harmony};
+    use is_odd;
 
     #[test]
     fn test_harmony() {
@@ -52,5 +69,10 @@ mod tests {
     fn test_str_harmony() {
         let result = harmony(0, 3);
         assert_eq!(result, "IMPOSSIBLE");
+    }
+
+    #[test]
+    fn test_is_odd() {
+        assert_eq!(true, is_odd(3));
     }
 }
