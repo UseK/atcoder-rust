@@ -1,8 +1,10 @@
 fn main() {
-    let _m =  read::<String>();
-    let input =  read::<String>();
-    let numbers: Vec<u64> = input.split_whitespace().map(|s| s.parse::<u64>().ok().unwrap()).collect();
-    println!("{}", count_shift(&numbers));
+    let a_500 =  read::<u16>();
+    let b_100 =  read::<u16>();
+    let c_50 =  read::<u16>();
+    let x =  read::<u16>();
+    let counted = count_pattern(a_500, b_100, c_50, x);
+    println!("{}", counted);
 }
 
 fn read<T: std::str::FromStr>() -> T {
@@ -11,54 +13,18 @@ fn read<T: std::str::FromStr>() -> T {
     s.trim().parse().ok().unwrap()
 }
 
-fn count_shift(numbers: &Vec<u64>) -> usize {
-    let mut cloned = numbers.clone();
-    let mut counter = 0;
-    while is_all_even(&cloned) {
-        counter += 1;
-        cloned = cloned.iter().map(|x| x / 2).collect();
+fn count_pattern(a: u16, b: u16, c: u16, n: u16) -> u64 {
+    let mut counter: u64 = 0;
+    for i_a in 0..a+1 {
+        for i_b in 0..b+1 {
+            for i_c in 0..c+1 {
+                let sum = i_a * 500 + i_b * 100 + i_c * 50;
+                if sum == n {
+                    counter += 1;
+                }
+            }
+        }
     }
     counter
 }
-
-fn is_all_even(numbers: &Vec<u64>) -> bool {
-    numbers.iter().all(|&x| is_even(x))
-}
-
-fn is_even(x: u64) -> bool {
-    x % 2 == 0
-}
-
-#[cfg(test)]
-mod tests {
-    use ::{is_all_even, count_shift};
-
-    #[test]
-    fn test_is_all_even() {
-        let input = "382253568 723152896 37802240 379425024 404894720 471526144";
-        let numbers: Vec<u64> = input.split_whitespace().map(|s| s.parse::<u64>().ok().unwrap()).collect();
-        assert_eq!(true, is_all_even(&numbers));
-        assert_eq!(true, is_all_even(&numbers));
-    }
-
-    #[test]
-    fn test_shift_only() {
-        let input = "382253568 723152896 37802240 379425024 404894720 471526144";
-        let mut numbers: Vec<u64> = input.split_whitespace().map(|s| s.parse::<u64>().ok().unwrap()).collect();
-        let mut counter = 0;
-        while is_all_even(&numbers) {
-            counter += 1;
-            numbers = numbers.iter().map(|x| x / 2).collect();
-        }
-        assert_eq!(8, counter)
-    }
-
-    #[test]
-    fn test_count_shift() {
-        let input = "382253568 723152896 37802240 379425024 404894720 471526144";
-        let numbers: Vec<u64> = input.split_whitespace().map(|s| s.parse::<u64>().ok().unwrap()).collect();
-        assert_eq!(8, count_shift(&numbers));
-    }
-}
-
 
